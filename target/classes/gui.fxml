@@ -12,9 +12,9 @@
   <children>
     <AnchorPane maxHeight="430.0" maxWidth="300.0" minHeight="430.0" minWidth="300.0" prefHeight="430.0" prefWidth="300.0" VBox.vgrow="ALWAYS">
       <children>
-            <Button focusTraversable="false" layoutX="187.0" layoutY="312.0" mnemonicParsing="false" text="Применить" />
+            <Button fx:id="applyButton" focusTraversable="false" layoutX="187.0" layoutY="312.0" mnemonicParsing="false" text="Применить" />
             <Spinner focusTraversable="false" layoutX="102.0" layoutY="222.0" />
-            <Spinner focusTraversable="false" layoutX="102.0" layoutY="267.0" />
+            <Spinner fx:id="power" focusTraversable="false" layoutX="102.0" layoutY="267.0" />
             <Separator layoutX="17.0" layoutY="199.0" prefHeight="3.0" prefWidth="268.0" />
             <Label layoutX="42.0" layoutY="225.0" prefHeight="20.0" prefWidth="60.0" text="Частота:" textAlignment="CENTER">
                <font>
@@ -72,6 +72,8 @@
                </font>
             </Label>
             <Separator layoutX="15.0" layoutY="346.0" prefHeight="3.0" prefWidth="268.0" />
+            <Button fx:id="startAndStopButton" focusTraversable="false" layoutX="123.0" layoutY="374.0" mnemonicParsing="false" text="Запуск" />
+            <Button fx:id="applyButton1" focusTraversable="false" layoutX="194.0" layoutY="166.0" mnemonicParsing="false" text="Счиатать" />
       </children>
     </AnchorPane>
   </children>

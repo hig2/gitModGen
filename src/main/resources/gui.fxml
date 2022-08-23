@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.gluonhq.charm.glisten.control.TextField?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
@@ -26,54 +27,72 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="73.0" layoutY="89.0" prefHeight="20.0" prefWidth="60.0" text="Частота:">
+            <Label layoutX="71.0" layoutY="130.0" prefHeight="20.0" prefWidth="60.0" text="Частота:">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="55.0" layoutY="109.0" prefHeight="20.0" prefWidth="82.0" text="Мощность:">
+            <Label layoutX="53.0" layoutY="150.0" prefHeight="20.0" prefWidth="82.0" text="Мощность:">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="137.0" layoutY="89.0" prefHeight="20.0" prefWidth="25.0" text="n/a">
+            <Label layoutX="135.0" layoutY="130.0" prefHeight="20.0" prefWidth="25.0" text="n/a">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="137.0" layoutY="109.0" prefHeight="20.0" prefWidth="25.0" text="n/a">
+            <Label layoutX="135.0" layoutY="150.0" prefHeight="20.0" prefWidth="25.0" text="n/a">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="162.0" layoutY="89.0" prefHeight="20.0" prefWidth="44.0" text="МГц">
+            <Label layoutX="160.0" layoutY="130.0" prefHeight="20.0" prefWidth="44.0" text="МГц">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="162.0" layoutY="109.0" prefHeight="20.0" prefWidth="44.0" text="dBi">
+            <Label layoutX="160.0" layoutY="150.0" prefHeight="20.0" prefWidth="44.0" text="dBi">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="191.0" layoutY="109.0" prefHeight="20.0" prefWidth="60.0" text="(n/a Вт)">
+            <Label layoutX="189.0" layoutY="150.0" prefHeight="20.0" prefWidth="60.0" text="(n/a Вт)">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="55.0" layoutY="129.0" prefHeight="20.0" prefWidth="82.0" text="Состояние:">
+            <Label layoutX="53.0" layoutY="170.0" prefHeight="20.0" prefWidth="82.0" text="Состояние:">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="137.0" layoutY="129.0" prefHeight="20.0" prefWidth="25.0" text="n/a">
+            <Label layoutX="135.0" layoutY="170.0" prefHeight="20.0" prefWidth="25.0" text="n/a">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
             <Separator layoutX="15.0" layoutY="346.0" prefHeight="3.0" prefWidth="268.0" />
             <Button fx:id="startAndStopButton" focusTraversable="false" layoutX="123.0" layoutY="374.0" mnemonicParsing="false" text="Запуск" />
-            <Button fx:id="applyButton1" focusTraversable="false" layoutX="194.0" layoutY="166.0" mnemonicParsing="false" text="Счиатать" />
+            <Button focusTraversable="false" layoutX="153.0" layoutY="42.0" mnemonicParsing="false" text="Подключится" />
+            <Separator layoutX="14.0" layoutY="106.0" prefHeight="3.0" prefWidth="268.0" />
+            <Button layoutX="71.0" layoutY="42.0" mnemonicParsing="false" text="R" />
+            <TextField layoutX="93.0" layoutY="42.0" prefHeight="25.0" prefWidth="60.0" />
+            <Label layoutX="40.0" layoutY="14.0" prefHeight="20.0" prefWidth="219.0" text="Выбор последовательного порта">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="52.0" layoutY="76.0" prefHeight="20.0" prefWidth="82.0" text="Состояние:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="135.0" layoutY="76.0" prefHeight="20.0" prefWidth="82.0" text="отключен">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
       </children>
     </AnchorPane>
   </children>
