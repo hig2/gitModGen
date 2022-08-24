@@ -5,7 +5,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 
 
 import javafx.scene.paint.Color;
@@ -17,7 +16,7 @@ import java.util.Objects;
 
 
 
-public class guiModGen extends Application {
+public class GuiModGen extends Application {
     public static void main(String[] args) {
         launch(args);
     }
@@ -33,6 +32,8 @@ public class guiModGen extends Application {
             primaryStage.setResizable(false);
             primaryStage.show();
             // запускаем основной класс
+
+            SerialPortConnect.getSerialPortsList();
 
             primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 @Override

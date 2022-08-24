@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.gluonhq.charm.glisten.control.TextField?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Spinner?>
@@ -9,90 +9,79 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="430.0" maxWidth="300.0" minHeight="430.0" minWidth="300.0" prefHeight="430.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="430.0" maxWidth="300.0" minHeight="430.0" minWidth="300.0" prefHeight="430.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MyController">
   <children>
     <AnchorPane maxHeight="430.0" maxWidth="300.0" minHeight="430.0" minWidth="300.0" prefHeight="430.0" prefWidth="300.0" VBox.vgrow="ALWAYS">
       <children>
-            <Button fx:id="applyButton" focusTraversable="false" layoutX="187.0" layoutY="312.0" mnemonicParsing="false" text="Применить" />
-            <Spinner focusTraversable="false" layoutX="102.0" layoutY="222.0" />
-            <Spinner fx:id="power" focusTraversable="false" layoutX="102.0" layoutY="267.0" />
+            <Button fx:id="applyButton" disable="true" focusTraversable="false" layoutX="187.0" layoutY="312.0" mnemonicParsing="false" text="Применить" />
+            <Spinner disable="true" focusTraversable="false" layoutX="102.0" layoutY="222.0" />
+            <Spinner fx:id="power" disable="true" focusTraversable="false" layoutX="102.0" layoutY="267.0" />
             <Separator layoutX="17.0" layoutY="199.0" prefHeight="3.0" prefWidth="268.0" />
-            <Label layoutX="42.0" layoutY="225.0" prefHeight="20.0" prefWidth="60.0" text="Частота:" textAlignment="CENTER">
+            <Label disable="true" layoutX="42.0" layoutY="225.0" prefHeight="20.0" prefWidth="60.0" text="Частота:" textAlignment="CENTER">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="27.0" layoutY="270.0" prefHeight="20.0" prefWidth="75.0" text="Мощность:" textAlignment="CENTER">
+            <Label disable="true" layoutX="27.0" layoutY="270.0" prefHeight="20.0" prefWidth="75.0" text="Мощность:" textAlignment="CENTER">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="71.0" layoutY="130.0" prefHeight="20.0" prefWidth="60.0" text="Частота:">
+            <Label disable="true" layoutX="71.0" layoutY="130.0" prefHeight="20.0" prefWidth="60.0" text="Частота:">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="53.0" layoutY="150.0" prefHeight="20.0" prefWidth="82.0" text="Мощность:">
+            <Label disable="true" layoutX="53.0" layoutY="150.0" prefHeight="20.0" prefWidth="82.0" text="Мощность:">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="135.0" layoutY="130.0" prefHeight="20.0" prefWidth="25.0" text="n/a">
+            <Label fx:id="freqStatus" disable="true" layoutX="135.0" layoutY="130.0" prefHeight="20.0" prefWidth="25.0" text="n/a">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="135.0" layoutY="150.0" prefHeight="20.0" prefWidth="25.0" text="n/a">
+            <Label fx:id="powStatus" disable="true" layoutX="135.0" layoutY="150.0" prefHeight="20.0" prefWidth="25.0" text="n/a">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="160.0" layoutY="130.0" prefHeight="20.0" prefWidth="44.0" text="МГц">
+            <Label disable="true" layoutX="160.0" layoutY="130.0" prefHeight="20.0" prefWidth="44.0" text="МГц">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="160.0" layoutY="150.0" prefHeight="20.0" prefWidth="44.0" text="dBi">
+            <Label disable="true" layoutX="160.0" layoutY="150.0" prefHeight="20.0" prefWidth="44.0" text="dBi">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="189.0" layoutY="150.0" prefHeight="20.0" prefWidth="60.0" text="(n/a Вт)">
+            <Label fx:id="powToWatsStatus" disable="true" layoutX="189.0" layoutY="150.0" prefHeight="20.0" prefWidth="60.0" text="(n/a Вт)">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="53.0" layoutY="170.0" prefHeight="20.0" prefWidth="82.0" text="Состояние:">
+            <Label disable="true" layoutX="53.0" layoutY="170.0" prefHeight="20.0" prefWidth="82.0" text="Состояние:">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="135.0" layoutY="170.0" prefHeight="20.0" prefWidth="25.0" text="n/a">
+            <Label disable="true" layoutX="135.0" layoutY="170.0" prefHeight="20.0" prefWidth="25.0" text="n/a">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
             <Separator layoutX="15.0" layoutY="346.0" prefHeight="3.0" prefWidth="268.0" />
-            <Button fx:id="startAndStopButton" focusTraversable="false" layoutX="123.0" layoutY="374.0" mnemonicParsing="false" text="Запуск" />
-            <Button focusTraversable="false" layoutX="153.0" layoutY="42.0" mnemonicParsing="false" text="Подключится" />
+            <Button fx:id="startAndStopButton" disable="true" focusTraversable="false" layoutX="123.0" layoutY="374.0" mnemonicParsing="false" text="Запуск" />
+            <Button fx:id="connectButton" disable="true" focusTraversable="false" layoutX="151.0" layoutY="64.0" mnemonicParsing="false" onAction="#connectButtonOnAction" text="Подключиться" />
             <Separator layoutX="14.0" layoutY="106.0" prefHeight="3.0" prefWidth="268.0" />
-            <Button layoutX="71.0" layoutY="42.0" mnemonicParsing="false" text="R" />
-            <TextField layoutX="93.0" layoutY="42.0" prefHeight="25.0" prefWidth="60.0" />
-            <Label layoutX="40.0" layoutY="14.0" prefHeight="20.0" prefWidth="219.0" text="Выбор последовательного порта">
+            <Label fx:id="connectLabelText" disable="true" layoutX="39.0" layoutY="36.0" prefHeight="20.0" prefWidth="219.0" text="Выбор последовательного порта">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="52.0" layoutY="76.0" prefHeight="20.0" prefWidth="82.0" text="Состояние:">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-            <Label layoutX="135.0" layoutY="76.0" prefHeight="20.0" prefWidth="82.0" text="отключен">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
+            <ComboBox fx:id="comPortsList" disable="true" focusTraversable="false" layoutX="61.0" layoutY="64.0" prefHeight="25.0" prefWidth="82.0" />
       </children>
     </AnchorPane>
   </children>
