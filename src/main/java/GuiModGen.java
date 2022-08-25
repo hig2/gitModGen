@@ -31,9 +31,6 @@ public class GuiModGen extends Application {
             //primaryStage.getIcons().add(new Image("picture/favicon.png"));
             primaryStage.setResizable(false);
             primaryStage.show();
-            // запускаем основной класс
-
-            SerialPortConnect.getSerialPortsList();
 
             primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 @Override

@@ -2,8 +2,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
-
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,18 +12,14 @@ import javafx.scene.control.Button;
 
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
 
 
 public class MyController implements Initializable{
-
-
-
-
     private void startShowThread(){
         //preInits
 
-
-        Thread statusMassageWatcherThread = new Thread(()->{
+        Thread showThread = new Thread(()->{
             while (true){
                 try {
                     Thread.sleep(100);
@@ -37,16 +31,16 @@ public class MyController implements Initializable{
                     @Override
                     public void run() {
                         showComPortsList();
-                        setConnectButtonShowStatus();
+                        showStatusConnectButton();
+                        showGeneralWindow();
+                        showPar();
                     }
                 });
             }
         });
-        statusMassageWatcherThread.start();
+        showThread.start();
     }
 
-    @FXML
-    private Button refreshComPortsListButton;
 
     @FXML
     private Button connectButton;
@@ -75,6 +69,43 @@ public class MyController implements Initializable{
     @FXML
     private Label powToWatsStatus;
 
+    @FXML
+    private Label freqLabel;
+
+    @FXML
+    private Label freqStatus;
+
+    @FXML
+    private Label frqPar;
+
+    @FXML
+    private Label powLabel;
+
+    @FXML
+    private Label freInputLabel;
+
+    @FXML
+    private Spinner freqInput;
+
+    @FXML
+    private Label powInputLabel;
+
+    @FXML
+    private Spinner powerInput;
+
+    @FXML
+    private Label powPar;
+
+    @FXML
+    private Label powToWatsPar;
+
+    @FXML
+    private Label frqParInput;
+
+    @FXML
+    private Label powParInput;
+
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -89,7 +120,9 @@ public class MyController implements Initializable{
             ObservableList<String> serialPortsList = FXCollections.observableArrayList(SerialPortConnect.getSerialPortsList());
             comPortsList.setItems(serialPortsList);
             //первый из списка выбираем
-            //comPortsList.setValue(serialPortsList.get(0));
+            if(comPortsList.getValue() == null){
+                comPortsList.setValue(serialPortsList.get(0));
+            }
         }else{
             connectLabelText.setDisable(true);
             comPortsList.setDisable(true);
@@ -97,11 +130,6 @@ public class MyController implements Initializable{
             comPortsList.valueProperty().set(null);
         }
 
-    }
-
-    public void refreshComPortsListButtonOnAction(ActionEvent event) {
-        System.out.println("обновляем список");
-        showComPortsList();
     }
 
     public void connectButtonOnAction(ActionEvent actionEvent) {
@@ -118,11 +146,46 @@ public class MyController implements Initializable{
         }
     }
 
-    public void setConnectButtonShowStatus(){
+    public void showStatusConnectButton(){
         if(SerialPortConnect.isConnected()){
             connectButton.setText("Отключиться");
         }else{
             connectButton.setText("Подключиться");
         }
+    }
+
+    private void showGeneralWindow(){
+        boolean flagDisableGeneralWindow = !SerialPortConnect.isConnected();
+
+        freqLabel.setDisable(flagDisableGeneralWindow);
+        freqStatus.setDisable(flagDisableGeneralWindow);
+        powLabel.setDisable(flagDisableGeneralWindow);
+        powStatus.setDisable(flagDisableGeneralWindow);
+        freInputLabel.setDisable(flagDisableGeneralWindow);
+        freqInput.setDisable(flagDisableGeneralWindow);
+        powInputLabel.setDisable(flagDisableGeneralWindow);
+        powerInput.setDisable(flagDisableGeneralWindow);
+        applyButton.setDisable(flagDisableGeneralWindow);
+        startAndStopButton.setDisable(flagDisableGeneralWindow);
+        powParInput.setDisable(flagDisableGeneralWindow);
+        frqParInput.setDisable(flagDisableGeneralWindow);
+
+    }
+
+    private void showPar(){
+        // так же нужно делать проверку на обмен
+        String freq;
+        String pow ;
+        if(SerialPortConnect.isConnected()){
+            freq = ModemPostman.getFrequencyModem() + " МГц";
+           pow = ModemPostman.getPowerModem() + " dBm" + "(" + ModemPostman.dbmTomWtt(ModemPostman.getPowerModem()) + "мВт)";
+        }else{
+            freq = "n/a";
+            pow = "n/a dBm (n/a мВт)";
+        }
+
+        freqStatus.setText(freq);
+        powStatus.setText(pow);
+
     }
 }

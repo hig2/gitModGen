@@ -8,26 +8,22 @@ import java.util.concurrent.atomic.AtomicLong;
 public class SerialPortConnect {
     private final static int BAUD_RATE_DEFAULT = 57600;
     private static SerialPort serialPort;
-    private static ArrayList<String> serialPortsList = new ArrayList<>();
+    private static  ArrayList<String> serialPortsList = new ArrayList<>();
     private String openPortName;
     private int openPortBaudRate;
     private static SerialPortConnect connect;
     private final byte[] globalBuffer = new byte[256];
-
-
-
-
 
     private SerialPortConnect(String openPortName) {
         serialPort = SerialPort.getCommPort(openPortName);
         serialPort.openPort();
         serialPort.setBaudRate(BAUD_RATE_DEFAULT);
         System.out.println("Порт открыт:  " + openPortName);
+        //disconnectWatcher();
+
         try {
             readTask(100);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -49,15 +45,12 @@ public class SerialPortConnect {
         return connect;
     }
 
-    public static void disconnect(){
-        connect = null;
-    }
 
     public static boolean isConnected(){
-        return SerialPortConnect.connect != null ? true : false;
+        return SerialPortConnect.connect != null;
     }
 
-    public static ArrayList<String> getSerialPortsList(){
+    synchronized public static ArrayList<String> getSerialPortsList(){
         serialPortsList.clear();
         for(SerialPort e: SerialPort.getCommPorts()){
             if(e.toString().equals("User-Specified Port")){
@@ -69,6 +62,7 @@ public class SerialPortConnect {
         if(serialPortsList.size() == 0){
             close();
         }
+
         return serialPortsList;
     }
 
@@ -80,7 +74,6 @@ public class SerialPortConnect {
     }
 
     private void readTask(long delay) throws IOException, InterruptedException {
-
         AtomicLong t = new AtomicLong(0);
         Thread thread = new Thread(() -> {
             while (connect != null) {
@@ -99,16 +92,38 @@ public class SerialPortConnect {
         thread.start();
     }
 
+    /*
+    private void disconnectWatcher(){
+        Thread thread = new Thread(()->{
+            while (connect != null) {
+                try {
+                    Thread.sleep(20);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //если нет не одного порта производим дисконнект
+            }
+        });
+        thread.start();
+    }
+
+     */
 
     private boolean readSerial(){
         while (serialPort.bytesAvailable() > 0) {
             byte[] readBuffer = new byte[serialPort.bytesAvailable()];
             int numRead = serialPort.readBytes(readBuffer, readBuffer.length);
+
+            char charArray[] = new char[numRead];
             for(int i = 0; numRead > i; i++){
-                System.out.print((char)readBuffer[i]);
+                charArray[i] = (char)readBuffer[i];
             }
+            String message = new String(charArray);
+
+            ModemPostman.parseBuffer(message);
             return true;
         }
         return false;
     }
+
 }
