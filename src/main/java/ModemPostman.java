@@ -7,17 +7,17 @@ public class ModemPostman {
     private static ModemPostman modemPostman ;
     public static final int MAX_POWER_VAlUE = 22;
     public static final int MIN_POWER_VAlUE = -3;
-    public static final int MAX_FREQUENCY_VAlUE = 150;
-    public static final int MIN_FREQUENCY_VAlUE = 1000;
+    public static final int MAX_FREQUENCY_VAlUE = 1000;
+    public static final int MIN_FREQUENCY_VAlUE = 100;
     public static final String MESSAGE_SYMBOL = "a";
     public static final int MESSAGE_POST_DELAY = 5;
     public static final int MESSAGE_READ_DELAY = 100;
 
-    private static int powerModem;
-    private static int frequencyModem;
-    private static int statusModem ;
-    private static int rssiModem ;
-    private static int snModem ;
+    private static int powerModem = 0;
+    private static int frequencyModem = 0;
+    private static int statusModem = 0;
+    private static int rssiModem = 0;
+    private static int snModem = 0;
 
 
     private ModemPostman(){
@@ -33,32 +33,44 @@ public class ModemPostman {
     }
 
 
-    public static void parseBuffer(String message){
+    public static boolean parseBuffer(String message){
         String[] valuesMessage = message.split(",");
-        System.out.println(Integer.parseInt(valuesMessage[2].trim()));
-        for (String word : valuesMessage) {
-            if (word.matches("\\+Val")) {
+        System.out.println(message);
+        String value = valuesMessage[2].substring(0, valuesMessage[2].length() - 1).trim();
+        String lastSymbol = valuesMessage[2].substring(valuesMessage[2].length() - 1);
+        int result = 0;
+        try{
+            result = Integer.parseInt(value);
+        }catch (Exception e){
+            System.out.println("ошибка парсера");
+        }
+
+
+        for (String e : valuesMessage) {
+            if (e.matches("\\+Val") && lastSymbol.equals("#")) {
                 //записываем
-                System.out.println(message);
                 switch (valuesMessage[1]){
                     case "0" :
-                        statusModem = Integer.parseInt(valuesMessage[2].trim());
+                        statusModem = result;
                     break;
                     case "1" :
-                        frequencyModem = Integer.parseInt(valuesMessage[2].trim()) / 1000;
+                        frequencyModem = result / 1_000_000;
                     break;
                     case "2" :
-                        powerModem = Integer.parseInt(valuesMessage[2].trim());
+                        powerModem = result;
                     break;
                     case "3" :
-                        rssiModem = Integer.parseInt(valuesMessage[2].trim());
+                        rssiModem = result;
                     break;
                     case "4" :
-                        snModem = Integer.parseInt(valuesMessage[2].trim());
+                        snModem = result;
                     break;
                 }
+
+                return  true;
             }
         }
+        return false;
     }
 
     public static int getPowerModem(){
@@ -79,6 +91,14 @@ public class ModemPostman {
 
     public static int getSnModem() {
         return snModem;
+    }
+
+    public static String createMessageRequestFrequency(){
+        return "+Get,1#" ;
+    }
+
+    public static String createMessageRequestPower(){
+        return "+Get,2#";
     }
 
 

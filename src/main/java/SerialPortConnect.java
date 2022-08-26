@@ -8,24 +8,23 @@ import java.util.concurrent.atomic.AtomicLong;
 public class SerialPortConnect {
     private final static int BAUD_RATE_DEFAULT = 57600;
     private static SerialPort serialPort;
-    private static  ArrayList<String> serialPortsList = new ArrayList<>();
-    private String openPortName;
+    private static  ArrayList<String> serialPortsList = new ArrayList<>(0);
+    private static String openPortName = "";
     private int openPortBaudRate;
     private static SerialPortConnect connect;
     private final byte[] globalBuffer = new byte[256];
+    static SerialPort[] serialPorts;
+    private static boolean exchangeFlag = false;
+
 
     private SerialPortConnect(String openPortName) {
         serialPort = SerialPort.getCommPort(openPortName);
         serialPort.openPort();
         serialPort.setBaudRate(BAUD_RATE_DEFAULT);
         System.out.println("Порт открыт:  " + openPortName);
+        this.openPortName = openPortName;
         //disconnectWatcher();
 
-        try {
-            readTask(100);
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     public static boolean connecting(String openPortName) throws Exception {
@@ -33,6 +32,12 @@ public class SerialPortConnect {
             if(getSerialPortsList().stream().anyMatch(e -> e.equals(openPortName))){
                 connect = new SerialPortConnect(openPortName);
                 System.out.println("Подключен");
+                try {
+                    readTask(20);
+                    writeTask(50);
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
+                }
                 return true;
             }else{
                 throw new Exception("Порт не обнаружен");
@@ -50,19 +55,18 @@ public class SerialPortConnect {
         return SerialPortConnect.connect != null;
     }
 
+
+
     synchronized public static ArrayList<String> getSerialPortsList(){
-        serialPortsList.clear();
+       serialPortsList.clear();
+
         for(SerialPort e: SerialPort.getCommPorts()){
-            if(e.toString().equals("User-Specified Port")){
-                continue;
-            }
             serialPortsList.add(e.getSystemPortName());
         }
         //если нет не одного порта производим дисконнект
         if(serialPortsList.size() == 0){
             close();
         }
-
         return serialPortsList;
     }
 
@@ -70,12 +74,41 @@ public class SerialPortConnect {
        if(serialPort != null && serialPort.isOpen()){
            serialPort.closePort();
        }
+        openPortName = "";
+        exchangeFlag = false;
         connect = null;
     }
 
-    private void readTask(long delay) throws IOException, InterruptedException {
+    private static void readTask(long delay) throws IOException, InterruptedException {
+        AtomicLong delayTimer = new AtomicLong(0);
+        final AtomicLong exchangeTimer = new AtomicLong(0);
+        Thread thread = new Thread(() -> {
+            while (connect != null) {
+                try {
+                    Thread.sleep(20);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if ((System.currentTimeMillis() - delayTimer.get()) > delay) {
+                    delayTimer.set(System.currentTimeMillis());
+
+                    //чтение и проверка на обмен
+                    if(readSerial()){
+                        exchangeTimer.set(System.currentTimeMillis());
+                        exchangeFlag = true;
+                    }else if((System.currentTimeMillis() - exchangeTimer.get()) > 1000){
+                        exchangeFlag = false;
+                    }
+                }
+            }
+        });
+        thread.start();
+    }
+
+    private static void writeTask(long delay) throws IOException, InterruptedException {
         AtomicLong t = new AtomicLong(0);
         Thread thread = new Thread(() -> {
+            int numTask = 0;
             while (connect != null) {
                 try {
                     Thread.sleep(20);
@@ -84,44 +117,54 @@ public class SerialPortConnect {
                 }
                 if ((System.currentTimeMillis() - t.get()) > delay) {
                     t.set(System.currentTimeMillis());
-                    readSerial();
-                    //System.out.println(globalBuffer);
+                    //get
+                    taskSwitch(numTask);
+                    numTask = numTask == 1 ? 0 : numTask + 1;
                 }
             }
         });
         thread.start();
     }
 
-    /*
-    private void disconnectWatcher(){
-        Thread thread = new Thread(()->{
-            while (connect != null) {
-                try {
-                    Thread.sleep(20);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                //если нет не одного порта производим дисконнект
-            }
-        });
-        thread.start();
+    private static void taskSwitch(int numTask){
+        switch (numTask){
+            case 0:
+                writeSerial(ModemPostman.createMessageRequestFrequency());
+            break;
+            case 1:
+                writeSerial(ModemPostman.createMessageRequestPower());
+            break;
+        }
     }
 
-     */
+    private static void writeSerial(String message){
+        byte[] bytesMassage = message.getBytes();
+        serialPort.writeBytes(bytesMassage, bytesMassage.length);
+    }
 
-    private boolean readSerial(){
+    public static boolean isExchangeFlag(){
+        return exchangeFlag;
+    }
+
+
+    private static boolean readSerial(){
+        AtomicLong t = new AtomicLong(0);
         while (serialPort.bytesAvailable() > 0) {
             byte[] readBuffer = new byte[serialPort.bytesAvailable()];
             int numRead = serialPort.readBytes(readBuffer, readBuffer.length);
-
             char charArray[] = new char[numRead];
             for(int i = 0; numRead > i; i++){
                 charArray[i] = (char)readBuffer[i];
             }
+
             String message = new String(charArray);
 
-            ModemPostman.parseBuffer(message);
-            return true;
+            //отслеживаем обмен и записываем данные в ModemPostman
+            if(ModemPostman.parseBuffer(message)){
+                return true;
+            }else{
+                return false;
+            }
         }
         return false;
     }

@@ -8,11 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Spinner;
+import javafx.scene.control.*;
 
 
 public class MyController implements Initializable{
@@ -34,6 +30,7 @@ public class MyController implements Initializable{
                         showStatusConnectButton();
                         showGeneralWindow();
                         showPar();
+                        showSpinnerInfo();
                     }
                 });
             }
@@ -85,13 +82,13 @@ public class MyController implements Initializable{
     private Label freInputLabel;
 
     @FXML
-    private Spinner freqInput;
+    private Spinner<Integer> freqInput;
 
     @FXML
     private Label powInputLabel;
 
     @FXML
-    private Spinner powerInput;
+    private Spinner<Integer> powerInput;
 
     @FXML
     private Label powPar;
@@ -113,6 +110,7 @@ public class MyController implements Initializable{
     }
 
     private void showComPortsList (){
+
         if (SerialPortConnect.getSerialPortsList().size() > 0){
             connectLabelText.setDisable(false);
             comPortsList.setDisable(false);
@@ -176,8 +174,8 @@ public class MyController implements Initializable{
         // так же нужно делать проверку на обмен
         String freq;
         String pow ;
-        if(SerialPortConnect.isConnected()){
-            freq = ModemPostman.getFrequencyModem() + " МГц";
+        if(SerialPortConnect.isConnected() && SerialPortConnect.isExchangeFlag()){
+           freq = ModemPostman.getFrequencyModem() + " МГц";
            pow = ModemPostman.getPowerModem() + " dBm" + "(" + ModemPostman.dbmTomWtt(ModemPostman.getPowerModem()) + "мВт)";
         }else{
             freq = "n/a";
@@ -186,6 +184,23 @@ public class MyController implements Initializable{
 
         freqStatus.setText(freq);
         powStatus.setText(pow);
+    }
+
+    private void showSpinnerInfo(){
+        if(SerialPortConnect.isConnected() && SerialPortConnect.isExchangeFlag()){
+            if(freqInput.getValue() == null){
+                SpinnerValueFactory<Integer> valueFreqFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(ModemPostman.MIN_FREQUENCY_VAlUE, ModemPostman.MAX_FREQUENCY_VAlUE, ModemPostman.getFrequencyModem());
+                freqInput.setValueFactory(valueFreqFactory);
+            }
+            if(powerInput.getValue() == null){
+                SpinnerValueFactory<Integer> valuePowFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(ModemPostman.MIN_POWER_VAlUE, ModemPostman.MAX_POWER_VAlUE, ModemPostman.getPowerModem());
+                powerInput.setValueFactory(valuePowFactory);
+            }
+
+        }else{
+
+        }
 
     }
 }
+
