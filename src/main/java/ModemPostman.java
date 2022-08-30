@@ -39,32 +39,45 @@ public class ModemPostman {
         char[] secondCharArray = new char[message.length];
         String resultString = "";
         boolean flagRec = false;
+
+        //проверка на мнимальный пакет
+        if(keyArray.length + 4 > message.length){
+            System.err.println("Ошибка парсера: длина посылки ("+ message.length + " - символа) меньше минимальной");
+            return false;
+        }
+
         for(int i = 0; i < message.length; i++){
             //выполняем совподение на ключ
-            if(message[i] == keyArray[0]){
-                for(int e = 0; e < keyArray.length; e++){
-                    if(keyArray[e] != message[i + e]){
-                        break;
-                    }
+            try {
+                if(message[i] == keyArray[0]){
+                    for(int e = 0; e < keyArray.length; e++){
+                        if(keyArray[e] != message[i + e]){
+                            break;
+                        }
 
-                    if(e == (keyArray.length - 1)){
-                        flagRec = true;
-                        i = i + e;
+                        if(e == (keyArray.length - 1)){
+                            flagRec = true;
+                            i = i + e;
+                        }
                     }
                 }
-            }
-            //терминальное условие + получение строки для дальнейшего парсинга
-            if (flagRec && message[i] == '#'){
-                char[] resultArray = new char[i - keyArray.length ];
+                //терминальное условие + получение строки для дальнейшего парсинга
+                if (flagRec && message[i] == '#'){
+                    char[] resultArray = new char[i - keyArray.length ];
 
-                for(int n = 0; n < resultArray.length; n ++){
-                    resultArray[n] = secondCharArray[n + keyArray.length];
+                    for(int n = 0; n < resultArray.length; n ++){
+                        resultArray[n] = secondCharArray[n + keyArray.length];
+                    }
+
+                    resultString = String.valueOf(resultArray);
+
+                    break;
                 }
-
-                resultString = String.valueOf(resultArray);
-
-                break;
+            }catch (Exception e){
+                System.err.println("Ошибка парсера: ошибка обработки");
+                return false;
             }
+
 
             //начинаем писать
             if(flagRec){
@@ -92,7 +105,7 @@ public class ModemPostman {
 
         try{
         }catch (Exception e){
-            System.out.println("Ошибка парсера: не верное значение");
+            System.err.println("Ошибка парсера: не верное значение");
         }
 
         //записываем
@@ -184,7 +197,7 @@ public class ModemPostman {
     public static String dbmTomWtt(double dbm){
         double mWtt = (1 * (Math.pow(10, (dbm / 10))));
 
-        return new DecimalFormat("#0").format(mWtt);
+        return new DecimalFormat("#0.0").format(mWtt);
     }
 
 

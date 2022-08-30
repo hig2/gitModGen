@@ -27,7 +27,7 @@ public class GuiModGen extends Application {
         try {
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass()
                     .getResource("gui.fxml")));
-            primaryStage.setTitle("Генератор v1.0");
+            primaryStage.setTitle("Генератор v1.1");
             primaryStage.setScene(new Scene(root, 300, 430, Color.web("#3C3F41")));
             primaryStage.getIcons().add(new Image("picture/favicon.png"));
             primaryStage.setResizable(false);

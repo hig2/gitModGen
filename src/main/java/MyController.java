@@ -105,6 +105,9 @@ public class MyController implements Initializable{
     @FXML
     private Label powParInput;
 
+    @FXML
+    private Label powInputDbmToWats;
+
 
 
     @Override
@@ -183,11 +186,13 @@ public class MyController implements Initializable{
         startAndStopButton.setDisable(flagDisableGeneralWindow);
         powParInput.setDisable(flagDisableGeneralWindow);
         frqParInput.setDisable(flagDisableGeneralWindow);
+        powInputDbmToWats.setDisable(flagDisableGeneralWindow);
 
         showPar();
         showInputInfo();
         showApplyButton();
         showStatusStartAndStopButton();
+        showPowInputDbmToWats();
     }
 
     private void showPar(){
@@ -208,7 +213,7 @@ public class MyController implements Initializable{
 
     private void showInputInfo(){
 
-        if((System.currentTimeMillis() - timerDelay) > 200){
+        if((System.currentTimeMillis() - timerDelay) > 500){
             if(SerialPortConnect.isConnected() && SerialPortConnect.isExchangeFlag()){
 
                 if(freqInput.getText().equals("") ){
@@ -239,5 +244,15 @@ public class MyController implements Initializable{
         }
     }
 
+    private void showPowInputDbmToWats(){
+        if(powerInput.getValue() != null){
+            int value = powerInput.getValue();
+            if(SerialPortConnect.isConnected()){
+                powInputDbmToWats.setText("(" + ModemPostman.dbmTomWtt(value) + " мВт)");
+            }else{
+                powInputDbmToWats.setText("(n/a мВт)");
+            }
+        }
+    }
 }
 

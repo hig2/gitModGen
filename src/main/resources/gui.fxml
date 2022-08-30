@@ -15,14 +15,14 @@
     <AnchorPane maxHeight="430.0" maxWidth="300.0" minHeight="430.0" minWidth="300.0" prefHeight="430.0" prefWidth="300.0" VBox.vgrow="ALWAYS">
       <children>
             <Button fx:id="applyButton" disable="true" focusTraversable="false" layoutX="187.0" layoutY="312.0" mnemonicParsing="false" onAction="#applyButtonOnAction" text="Применить" />
-            <Spinner fx:id="powerInput" disable="true" focusTraversable="false" layoutX="102.0" layoutY="267.0" prefHeight="25.0" prefWidth="106.0" />
+            <Spinner fx:id="powerInput" disable="true" focusTraversable="false" layoutX="128.0" layoutY="269.0" prefHeight="25.0" prefWidth="60.0" />
             <Separator layoutX="17.0" layoutY="199.0" prefHeight="3.0" prefWidth="268.0" />
-            <Label fx:id="freInputLabel" disable="true" layoutX="42.0" layoutY="225.0" prefHeight="20.0" prefWidth="60.0" text="Частота:" textAlignment="CENTER">
+            <Label fx:id="freInputLabel" disable="true" layoutX="68.0" layoutY="227.0" prefHeight="20.0" prefWidth="60.0" text="Частота:" textAlignment="CENTER">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label fx:id="powInputLabel" disable="true" layoutX="27.0" layoutY="270.0" prefHeight="20.0" prefWidth="75.0" text="Мощность:" textAlignment="CENTER">
+            <Label fx:id="powInputLabel" disable="true" layoutX="53.0" layoutY="272.0" prefHeight="20.0" prefWidth="75.0" text="Мощность:" textAlignment="CENTER">
                <font>
                   <Font size="14.0" />
                </font>
@@ -57,17 +57,22 @@
                </font>
             </Label>
             <ComboBox fx:id="comPortsList" disable="true" focusTraversable="false" layoutX="61.0" layoutY="64.0" prefHeight="25.0" prefWidth="82.0" />
-            <Label fx:id="frqParInput" disable="true" layoutX="217.0" layoutY="225.0" prefHeight="20.0" prefWidth="44.0" text="МГц">
+            <Label fx:id="frqParInput" disable="true" layoutX="196.0" layoutY="228.0" prefHeight="20.0" prefWidth="44.0" text="МГц">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label fx:id="powParInput" disable="true" layoutX="218.0" layoutY="270.0" prefHeight="20.0" prefWidth="38.0" text="dBm">
+            <Label fx:id="powParInput" disable="true" layoutX="199.0" layoutY="272.0" prefHeight="20.0" prefWidth="38.0" text="dBm">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <TextField fx:id="freqInput" disable="true" layoutX="102.0" layoutY="223.0" prefHeight="25.0" prefWidth="106.0" />
+            <TextField fx:id="freqInput" disable="true" layoutX="128.0" layoutY="225.0" prefHeight="25.0" prefWidth="60.0" />
+            <Label fx:id="powInputDbmToWats" disable="true" layoutX="228.0" layoutY="272.0" prefHeight="20.0" prefWidth="75.0" text="(n/a мВт)">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
       </children>
     </AnchorPane>
   </children>

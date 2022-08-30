@@ -36,7 +36,7 @@ public class SerialPortConnect {
                 try {
                     setDefaultPermanentMessageList();
                     readTask(20);
-                    writeTask(50);
+                    writeTask(20);
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -156,6 +156,9 @@ public class SerialPortConnect {
         while (serialPort.bytesAvailable() > 0) {
             byte[] readBuffer = new byte[serialPort.bytesAvailable()];
             int numRead = serialPort.readBytes(readBuffer, readBuffer.length);
+            if(numRead <= 0){
+                return false;
+            }
             char charArray[] = new char[numRead];
 
             for(int i = 0; numRead > i; i++){
