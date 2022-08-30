@@ -1,14 +1,15 @@
 import com.fazecast.jSerialComm.SerialPort;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class SerialPortConnect {
     private final static int BAUD_RATE_DEFAULT = 57600;
     private static SerialPort serialPort;
     private static  ArrayList<String> serialPortsList = new ArrayList<>(0);
+    private static Queue<String> taskMessageQueue = new LinkedList<>();
+    private static HashSet<String> defaultMessageList = new HashSet<String>();
     private static String openPortName = "";
     private int openPortBaudRate;
     private static SerialPortConnect connect;
@@ -33,6 +34,7 @@ public class SerialPortConnect {
                 connect = new SerialPortConnect(openPortName);
                 System.out.println("Подключен");
                 try {
+                    setDefaultPermanentMessageList();
                     readTask(20);
                     writeTask(50);
                 } catch (IOException | InterruptedException e) {
@@ -108,36 +110,38 @@ public class SerialPortConnect {
     private static void writeTask(long delay) throws IOException, InterruptedException {
         AtomicLong t = new AtomicLong(0);
         Thread thread = new Thread(() -> {
-            int numTask = 0;
+            setDefaultTask(defaultMessageList);
             while (connect != null) {
-                try {
-                    Thread.sleep(20);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if ((System.currentTimeMillis() - t.get()) > delay) {
-                    t.set(System.currentTimeMillis());
-                    //get
-                    taskSwitch(numTask);
-                    numTask = numTask == 1 ? 0 : numTask + 1;
+                if(ModemPostman.getStatusModem() == 0){
+                    try {
+                        Thread.sleep(20);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if ((System.currentTimeMillis() - t.get()) > delay) {
+                        t.set(System.currentTimeMillis());
+                        //get
+                        String taskMessage = taskMessageQueue.remove();
+                        if(defaultMessageList.contains(taskMessage)){
+                            taskMessageQueue.offer(taskMessage);
+                        }
+                        writeSerial(taskMessage);
+                    }
+                }else if(ModemPostman.getStatusModem() == 1){
+                    try {
+                        Thread.sleep(5);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    writeSerial("333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333");
                 }
             }
         });
         thread.start();
     }
 
-    private static void taskSwitch(int numTask){
-        switch (numTask){
-            case 0:
-                writeSerial(ModemPostman.createMessageRequestFrequency());
-            break;
-            case 1:
-                writeSerial(ModemPostman.createMessageRequestPower());
-            break;
-        }
-    }
 
-    private static void writeSerial(String message){
+    public static void writeSerial(String message){
         byte[] bytesMassage = message.getBytes();
         serialPort.writeBytes(bytesMassage, bytesMassage.length);
     }
@@ -153,20 +157,35 @@ public class SerialPortConnect {
             byte[] readBuffer = new byte[serialPort.bytesAvailable()];
             int numRead = serialPort.readBytes(readBuffer, readBuffer.length);
             char charArray[] = new char[numRead];
+
             for(int i = 0; numRead > i; i++){
                 charArray[i] = (char)readBuffer[i];
             }
 
-            String message = new String(charArray);
+            //String message = new String(charArray);
 
             //отслеживаем обмен и записываем данные в ModemPostman
-            if(ModemPostman.parseBuffer(message)){
-                return true;
-            }else{
-                return false;
-            }
+            return  ModemPostman.parseBuffer(charArray);
+
         }
         return false;
+    }
+
+    private static void setDefaultTask(HashSet taskList){
+        for(Object e : taskList){
+            taskMessageQueue.offer((String) e);
+        }
+    }
+
+    public static void setQueueMessage(String message){
+        System.out.println(message);
+        taskMessageQueue.add(message);
+    }
+
+    private static void setDefaultPermanentMessageList(){
+        defaultMessageList.add(ModemPostman.createMessageRequestFrequency());
+        defaultMessageList.add(ModemPostman.createMessageRequestPower());
+        defaultMessageList.add(ModemPostman.createMessageRequestStatusModem());
     }
 
 }

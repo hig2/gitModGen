@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 
 
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -28,7 +29,7 @@ public class GuiModGen extends Application {
                     .getResource("gui.fxml")));
             primaryStage.setTitle("Генератор v1.0");
             primaryStage.setScene(new Scene(root, 300, 430, Color.web("#3C3F41")));
-            //primaryStage.getIcons().add(new Image("picture/favicon.png"));
+            primaryStage.getIcons().add(new Image("picture/favicon.png"));
             primaryStage.setResizable(false);
             primaryStage.show();
 

@@ -1,23 +1,22 @@
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.regex.Pattern;
+import java.util.Arrays;
 
 public class ModemPostman {
     private static ModemPostman modemPostman ;
     public static final int MAX_POWER_VAlUE = 22;
     public static final int MIN_POWER_VAlUE = -3;
-    public static final int MAX_FREQUENCY_VAlUE = 1000;
-    public static final int MIN_FREQUENCY_VAlUE = 100;
+    public static final int MAX_FREQUENCY_VAlUE = 1000 * 1_000_000;
+    public static final int MIN_FREQUENCY_VAlUE = 100 * 1_000_000;
     public static final String MESSAGE_SYMBOL = "a";
     public static final int MESSAGE_POST_DELAY = 5;
     public static final int MESSAGE_READ_DELAY = 100;
 
-    private static int powerModem = 0;
+    private static int powerModem;
     private static int frequencyModem = 0;
-    private static int statusModem = 0;
-    private static int rssiModem = 0;
-    private static int snModem = 0;
+    public static int statusModem;
+    private static int rssiModem;
+    private static int snModem;
 
 
     private ModemPostman(){
@@ -33,44 +32,89 @@ public class ModemPostman {
     }
 
 
-    public static boolean parseBuffer(String message){
-        String[] valuesMessage = message.split(",");
-        System.out.println(message);
-        String value = valuesMessage[2].substring(0, valuesMessage[2].length() - 1).trim();
-        String lastSymbol = valuesMessage[2].substring(valuesMessage[2].length() - 1);
-        int result = 0;
-        try{
-            result = Integer.parseInt(value);
-        }catch (Exception e){
-            System.out.println("ошибка парсера");
-        }
+    public static boolean parseBuffer(char[] message){
+        System.out.println(String.valueOf(message));
+        char[] keyArray =  "+Val,".toCharArray();
 
+        char[] secondCharArray = new char[message.length];
+        String resultString = "";
+        boolean flagRec = false;
+        for(int i = 0; i < message.length; i++){
+            //выполняем совподение на ключ
+            if(message[i] == keyArray[0]){
+                for(int e = 0; e < keyArray.length; e++){
+                    if(keyArray[e] != message[i + e]){
+                        break;
+                    }
 
-        for (String e : valuesMessage) {
-            if (e.matches("\\+Val") && lastSymbol.equals("#")) {
-                //записываем
-                switch (valuesMessage[1]){
-                    case "0" :
-                        statusModem = result;
-                    break;
-                    case "1" :
-                        frequencyModem = result / 1_000_000;
-                    break;
-                    case "2" :
-                        powerModem = result;
-                    break;
-                    case "3" :
-                        rssiModem = result;
-                    break;
-                    case "4" :
-                        snModem = result;
-                    break;
+                    if(e == (keyArray.length - 1)){
+                        flagRec = true;
+                        i = i + e;
+                    }
+                }
+            }
+            //терминальное условие + получение строки для дальнейшего парсинга
+            if (flagRec && message[i] == '#'){
+                char[] resultArray = new char[i - keyArray.length ];
+
+                for(int n = 0; n < resultArray.length; n ++){
+                    resultArray[n] = secondCharArray[n + keyArray.length];
                 }
 
-                return  true;
+                resultString = String.valueOf(resultArray);
+
+                break;
+            }
+
+            //начинаем писать
+            if(flagRec){
+                secondCharArray[i] = message[i];
+            }
+
+            if(i == message.length - 1){
+                //ненайден терминальный символ
+                return  false;
             }
         }
-        return false;
+
+        String[] valuesMessage = resultString.split(",");
+        String key = " ";
+        int value = 0;
+
+        if(valuesMessage.length == 2){
+            key = valuesMessage[0];
+            value = Integer.parseInt(valuesMessage[1]);
+
+        }else{
+            //ошибка полученного значения
+            return false;
+        }
+
+        try{
+        }catch (Exception e){
+            System.out.println("Ошибка парсера: не верное значение");
+        }
+
+        //записываем
+        switch (key){
+            case "0" :
+                statusModem = value;
+            break;
+            case "1" :
+                frequencyModem = value / 1_000_000;
+            break;
+            case "2" :
+                powerModem = value;
+            break;
+            case "3" :
+                rssiModem = value;
+            break;
+            case "4" :
+                snModem = value;
+            break;
+        }
+
+        return  true;
     }
 
     public static int getPowerModem(){
@@ -96,22 +140,45 @@ public class ModemPostman {
     public static String createMessageRequestFrequency(){
         return "+Get,1#" ;
     }
+    public static String createMessageRequestStatusModem(){
+        return "+Get,0#" ;
+    }
 
     public static String createMessageRequestPower(){
         return "+Get,2#";
     }
 
+    public static String createMessageSetFrequency(int value){
+        value = value * 1_000_000;
 
-    private void setModemPower(int value){
+        if(value > MAX_FREQUENCY_VAlUE){
+            value = MAX_FREQUENCY_VAlUE;
+        }
+        if(value < MIN_FREQUENCY_VAlUE){
+            value = MIN_FREQUENCY_VAlUE;
+        }
+        String result = "+Set,1," + value +"#";
+        return result;
+    }
+
+    public static String createMessageSetPower(int value){
+
+
         if(value > MAX_POWER_VAlUE){
             value = MAX_POWER_VAlUE;
         }
         if(value < MIN_POWER_VAlUE){
             value = MIN_POWER_VAlUE;
         }
-
-
+        String result = "+Set,2," + value +"#";
+        return result;
     }
+
+    public static String createMessageStatusModem(int value){
+        String result = "+Set,0," + value +"#";
+        return result;
+    }
+
 
 
     public static String dbmTomWtt(double dbm){
@@ -121,9 +188,8 @@ public class ModemPostman {
     }
 
 
-    public static void clear(){
-        modemPostman = null;
-    }
+
+
 
 
     /*
