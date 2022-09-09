@@ -58,7 +58,7 @@ public class SerialPortConnect {
     }
 
 
-
+    //апдейт списка ком портов
     synchronized public static ArrayList<String> getSerialPortsList(){
        serialPortsList.clear();
 
@@ -69,6 +69,7 @@ public class SerialPortConnect {
         if(serialPortsList.size() == 0){
             close();
         }
+
         return serialPortsList;
     }
 
@@ -87,7 +88,7 @@ public class SerialPortConnect {
         Thread thread = new Thread(() -> {
             while (connect != null) {
                 try {
-                    Thread.sleep(20);
+                    Thread.sleep(5);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -107,17 +108,32 @@ public class SerialPortConnect {
         thread.start();
     }
 
+
+    private static void disconnectWatcher(){
+        long t = System.currentTimeMillis();
+        Thread thread = new Thread(()->{
+            while (connect != null) {
+                try {
+                    Thread.sleep(20);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if((System.currentTimeMillis() - t) > 1000){
+                    if(!isExchangeFlag()){close();
+                    }
+                }
+            }
+        });
+        thread.start();
+    }
+
     private static void writeTask(long delay) throws IOException, InterruptedException {
         AtomicLong t = new AtomicLong(0);
         Thread thread = new Thread(() -> {
             setDefaultTask(defaultMessageList);
             while (connect != null) {
+                //проверка на статус модема и режим работы
                 if(ModemPostman.getStatusModem() == 0){
-                    try {
-                        Thread.sleep(20);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                     if ((System.currentTimeMillis() - t.get()) > delay) {
                         t.set(System.currentTimeMillis());
                         //get
@@ -128,12 +144,19 @@ public class SerialPortConnect {
                         writeSerial(taskMessage);
                     }
                 }else if(ModemPostman.getStatusModem() == 1){
-                    try {
-                        Thread.sleep(5);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    //режим генератора
+                    if(ModemPostman.getJobMode() == 0){
+                        writeSerial("333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333");
+
+                    //режим замера rssi
+                    }else if (ModemPostman.getJobMode() == 1){
+                        try {
+                            Thread.sleep(200);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        writeSerial(ModemPostman.createMessageRequestRssi());
                     }
-                    writeSerial("333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333");
                 }
             }
         });

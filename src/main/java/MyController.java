@@ -108,6 +108,33 @@ public class MyController implements Initializable{
     @FXML
     private Label powInputDbmToWats;
 
+    @FXML
+    private Label modeLabel;
+
+    @FXML
+    private Label rssiLabel;
+
+    @FXML
+    private Label rssiStatus;
+
+    @FXML
+    private Label statusLabel;
+
+    @FXML
+    private Label conLabel;
+
+
+
+    @FXML
+    private RadioButton genRadioButton;
+
+    @FXML
+    private RadioButton rssiRadioButton;
+
+    @FXML
+    private ToggleGroup modeGroup;
+
+
 
 
     @Override
@@ -165,15 +192,20 @@ public class MyController implements Initializable{
     }
 
     public void startAndStopOnAction(ActionEvent actionEvent){
+
         if(ModemPostman.getStatusModem() == 0){
+            //добовляем сообщение в очередь на передачу модему
             SerialPortConnect.setQueueMessage(ModemPostman.createMessageStatusModem(1));
         }else if(ModemPostman.getStatusModem() == 1){
+            //выполняем передачу сообщения модему на прямую без очереди
             SerialPortConnect.writeSerial(ModemPostman.createMessageStatusModem(0));
+
         }
     }
 
     private void showGeneralWindow(){
         boolean flagDisableGeneralWindow = !SerialPortConnect.isConnected();
+
 
         freqLabel.setDisable(flagDisableGeneralWindow);
         freqStatus.setDisable(flagDisableGeneralWindow);
@@ -187,28 +219,48 @@ public class MyController implements Initializable{
         powParInput.setDisable(flagDisableGeneralWindow);
         frqParInput.setDisable(flagDisableGeneralWindow);
         powInputDbmToWats.setDisable(flagDisableGeneralWindow);
+        rssiLabel.setDisable(flagDisableGeneralWindow);
+        rssiStatus.setDisable(flagDisableGeneralWindow);
+        statusLabel.setDisable(flagDisableGeneralWindow);
+        conLabel.setDisable(flagDisableGeneralWindow);
+
 
         showPar();
         showInputInfo();
         showApplyButton();
         showStatusStartAndStopButton();
         showPowInputDbmToWats();
+        showMode();
+        getRadioButton();
     }
 
     private void showPar(){
         // так же нужно делать проверку на обмен
         String freq;
-        String pow ;
+        String pow;
+        String rssi;
+
         if(SerialPortConnect.isConnected() && (SerialPortConnect.isExchangeFlag() || ModemPostman.getStatusModem() == 1)){
            freq = ModemPostman.getFrequencyModem() + " МГц";
            pow = ModemPostman.getPowerModem() + " dBm" + "(" + ModemPostman.dbmTomWtt(ModemPostman.getPowerModem()) + "мВт)";
+           // здесь нужна проверка на режим работы
         }else{
             freq = "n/a";
             pow = "n/a dBm (n/a мВт)";
         }
 
+        //замер в rssi режиме
+        if(ModemPostman.getStatusModem() == 1 && ModemPostman.getJobMode() == 1){
+            rssi = String.valueOf(ModemPostman.getRssiModem());
+        }else{
+            rssi = "n/a";
+        }
+
+
+
         freqStatus.setText(freq);
         powStatus.setText(pow);
+        rssiStatus.setText(rssi);
     }
 
     private void showInputInfo(){
@@ -252,6 +304,27 @@ public class MyController implements Initializable{
             }else{
                 powInputDbmToWats.setText("(n/a мВт)");
             }
+        }
+    }
+
+    private void showMode(){
+        boolean status = !(SerialPortConnect.isConnected() && SerialPortConnect.isExchangeFlag() && ModemPostman.getStatusModem() == 0);
+        modeLabel.setDisable(status);
+        genRadioButton.setDisable(status);
+        rssiRadioButton.setDisable(status);
+    }
+
+    private void getRadioButton(){
+        RadioButton selectedRadioButton = (RadioButton) modeGroup.getSelectedToggle();
+        String valueMode = selectedRadioButton.getText();
+
+        switch (valueMode){
+            case "Генератор" :
+                ModemPostman.setJobMode(0);
+                break;
+            case "Измерение Rssi" :
+                ModemPostman.setJobMode(1);
+                break;
         }
     }
 }

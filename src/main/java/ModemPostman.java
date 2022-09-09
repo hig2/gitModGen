@@ -1,3 +1,6 @@
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Arrays;
@@ -11,6 +14,7 @@ public class ModemPostman {
     public static final String MESSAGE_SYMBOL = "a";
     public static final int MESSAGE_POST_DELAY = 5;
     public static final int MESSAGE_READ_DELAY = 100;
+    private static int jobMode = 0;
 
     private static int powerModem;
     private static int frequencyModem = 0;
@@ -31,6 +35,13 @@ public class ModemPostman {
         return false;
     }
 
+    public static int getJobMode(){
+        return jobMode;
+    }
+
+    public static void setJobMode(int mode){
+        jobMode = mode;
+    }
 
     public static boolean parseBuffer(char[] message){
         System.out.println(String.valueOf(message));
@@ -150,18 +161,28 @@ public class ModemPostman {
         return snModem;
     }
 
-    public static String createMessageRequestFrequency(){
+    @Contract(pure = true)
+    public static @NotNull String createMessageRequestFrequency(){
         return "+Get,1#" ;
     }
-    public static String createMessageRequestStatusModem(){
+
+    @Contract(pure = true)
+    public static @NotNull String createMessageRequestStatusModem(){
         return "+Get,0#" ;
     }
 
-    public static String createMessageRequestPower(){
+    @Contract(pure = true)
+    public static @NotNull String createMessageRequestPower(){
         return "+Get,2#";
     }
 
-    public static String createMessageSetFrequency(int value){
+    @Contract(pure = true)
+    public static @NotNull String createMessageRequestRssi(){
+        return "+Get,3#" ;
+    }
+
+    @Contract(pure = true)
+    public static @NotNull String createMessageSetFrequency(int value){
         value = value * 1_000_000;
 
         if(value > MAX_FREQUENCY_VAlUE){
@@ -174,7 +195,8 @@ public class ModemPostman {
         return result;
     }
 
-    public static String createMessageSetPower(int value){
+    @Contract(pure = true)
+    public static @NotNull String createMessageSetPower(int value){
 
 
         if(value > MAX_POWER_VAlUE){
@@ -187,7 +209,8 @@ public class ModemPostman {
         return result;
     }
 
-    public static String createMessageStatusModem(int value){
+    @Contract(pure = true)
+    public static @NotNull String createMessageStatusModem(int value){
         String result = "+Set,0," + value +"#";
         return result;
     }
