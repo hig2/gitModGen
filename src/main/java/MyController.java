@@ -15,6 +15,7 @@ import javafx.scene.control.*;
 
 public class MyController implements Initializable{
     private long timerDelay = 0;
+    private boolean firstStartFlag = false;
 
     private void startShowThread(){
         //preInits
@@ -33,6 +34,15 @@ public class MyController implements Initializable{
                         showComPortsList();
                         showStatusConnectButton();
                         showGeneralWindow();
+
+                        if(!firstStartFlag){
+                            if(SerialPortConnect.isConnected() && SerialPortConnect.isExchangeFlag()){
+                                timerDelay = System.currentTimeMillis();
+                                firstStartFlag = true;
+                            }else{
+                                timerDelay = System.currentTimeMillis();
+                            }
+                        }
 
                     }
                 });
@@ -168,7 +178,6 @@ public class MyController implements Initializable{
             System.out.println("Отключение.");
             SerialPortConnect.close();
         }else{
-            timerDelay = System.currentTimeMillis();
             System.out.println("Подключение: " + comPortsList.getValue());
             try {
                 SerialPortConnect.connecting(comPortsList.getValue());
@@ -194,12 +203,9 @@ public class MyController implements Initializable{
     public void startAndStopOnAction(ActionEvent actionEvent){
 
         if(ModemPostman.getStatusModem() == 0){
-            //добовляем сообщение в очередь на передачу модему
-            SerialPortConnect.setQueueMessage(ModemPostman.createMessageStatusModem(1));
+            SerialPortConnect.startModem();
         }else if(ModemPostman.getStatusModem() == 1){
-            //выполняем передачу сообщения модему на прямую без очереди
-            SerialPortConnect.writeSerial(ModemPostman.createMessageStatusModem(0));
-
+            SerialPortConnect.stopModem();
         }
     }
 
@@ -251,7 +257,7 @@ public class MyController implements Initializable{
 
         //замер в rssi режиме
         if(ModemPostman.getStatusModem() == 1 && ModemPostman.getJobMode() == 1){
-            rssi = String.valueOf(ModemPostman.getRssiModem());
+            rssi = String.valueOf(ModemPostman.getRssiModem()) + " dBm";
         }else{
             rssi = "n/a";
         }
@@ -265,7 +271,7 @@ public class MyController implements Initializable{
 
     private void showInputInfo(){
 
-        if((System.currentTimeMillis() - timerDelay) > 500){
+        if((System.currentTimeMillis() - timerDelay) > 300){
             if(SerialPortConnect.isConnected() && SerialPortConnect.isExchangeFlag()){
 
                 if(freqInput.getText().equals("") ){

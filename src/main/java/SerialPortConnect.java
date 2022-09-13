@@ -129,9 +129,46 @@ public class SerialPortConnect {
 
     private static void writeTask(long delay) throws IOException, InterruptedException {
         AtomicLong t = new AtomicLong(0);
+        boolean generatorFlag = false;
+
         Thread thread = new Thread(() -> {
             setDefaultTask(defaultMessageList);
             while (connect != null) {
+                /*
+                if ((System.currentTimeMillis() - t.get()) > delay) {
+                    t.set(System.currentTimeMillis());
+
+                    if(ModemPostman.getStatusModem() == 0){
+                        //режим ожидания
+                        String taskMessage = taskMessageQueue.remove();
+                        if(defaultMessageList.contains(taskMessage)){
+                            taskMessageQueue.offer(taskMessage);
+                        }
+                        writeSerial(taskMessage);
+
+                    }else if(ModemPostman.getStatusModem() == 1){
+                        //режим работы
+                        if(ModemPostman.getJobMode() == 0){
+                        //режим работы генератора
+                            if(generatorFlag){
+
+                            }
+                            String taskMessage = taskMessageQueue.remove();
+                            if(defaultMessageList.contains(taskMessage)){
+                                taskMessageQueue.offer(taskMessage);
+                            }
+                            writeSerial(taskMessage);
+
+                        }else if(ModemPostman.getJobMode() == 1){
+                        //режим работы измерения rssi
+
+                        }
+                    }
+
+                }
+                */
+
+
                 //проверка на статус модема и режим работы
                 if(ModemPostman.getStatusModem() == 0){
                     if ((System.currentTimeMillis() - t.get()) > delay) {
@@ -151,7 +188,7 @@ public class SerialPortConnect {
                     //режим замера rssi
                     }else if (ModemPostman.getJobMode() == 1){
                         try {
-                            Thread.sleep(200);
+                            Thread.sleep(50);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -212,6 +249,25 @@ public class SerialPortConnect {
         defaultMessageList.add(ModemPostman.createMessageRequestFrequency());
         defaultMessageList.add(ModemPostman.createMessageRequestPower());
         defaultMessageList.add(ModemPostman.createMessageRequestStatusModem());
+        defaultMessageList.add(ModemPostman.createMessageRequestRssi());
     }
 
+    public static void stopModem(){
+        Thread thread = new Thread(() -> {
+            while (serialPort != null && ModemPostman.statusModem == 1) {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                SerialPortConnect.writeSerial(ModemPostman.createMessageStatusModem(0));
+            }
+        });
+        thread.start();
+    }
+
+    public static void startModem(){
+        setQueueMessage(ModemPostman.createMessageStatusModem(1));
+    }
 }

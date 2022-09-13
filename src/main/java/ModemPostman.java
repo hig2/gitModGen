@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class ModemPostman {
     private static ModemPostman modemPostman ;
@@ -182,6 +183,11 @@ public class ModemPostman {
     }
 
     @Contract(pure = true)
+    public  static @NotNull String createMessageSetSymbol(){
+        return "333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333";
+    }
+
+    @Contract(pure = true)
     public static @NotNull String createMessageSetFrequency(int value){
         value = value * 1_000_000;
 
@@ -222,7 +228,6 @@ public class ModemPostman {
 
         return new DecimalFormat("#0.0").format(mWtt);
     }
-
 
 
 
