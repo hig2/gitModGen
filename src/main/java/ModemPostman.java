@@ -19,6 +19,7 @@ public class ModemPostman {
 
     private static int powerModem;
     private static int frequencyModem = 0;
+
     public static int statusModem;
     private static int rssiModem;
     private static int snModem;
@@ -27,6 +28,12 @@ public class ModemPostman {
     private ModemPostman(){
 
     }
+
+
+
+
+
+
 
     public static boolean initModem() throws IOException, InterruptedException {
         if(modemPostman == null){

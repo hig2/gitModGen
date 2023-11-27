@@ -12,100 +12,105 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="430.0" maxWidth="300.0" minHeight="480.0" minWidth="300.0" prefHeight="430.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MyController">
+<VBox maxHeight="565.0" maxWidth="384.0" minHeight="565.0" minWidth="300.0" prefHeight="565.0" prefWidth="384.0" xmlns="http://javafx.com/javafx/8.0.351" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MyController">
   <children>
-    <AnchorPane maxHeight="570.0" maxWidth="300.0" minHeight="447.0" minWidth="278.0" prefHeight="447.0" prefWidth="278.0" VBox.vgrow="ALWAYS">
+    <AnchorPane maxHeight="565.0" maxWidth="458.0" minHeight="565.0" minWidth="277.0" prefHeight="565.0" prefWidth="458.0" VBox.vgrow="ALWAYS">
       <children>
-            <Button fx:id="applyButton" disable="true" focusTraversable="false" layoutX="109.0" layoutY="302.0" mnemonicParsing="false" onAction="#applyButtonOnAction" text="Применить" />
-            <Spinner fx:id="powerInput" disable="true" focusTraversable="false" layoutX="125.0" layoutY="260.0" prefHeight="25.0" prefWidth="60.0" />
-            <Separator layoutX="17.0" layoutY="186.0" prefHeight="3.0" prefWidth="268.0" />
-            <Label fx:id="freInputLabel" disable="true" layoutX="63.0" layoutY="233.0" prefHeight="20.0" prefWidth="60.0" text="Частота:" textAlignment="CENTER">
+            <Button fx:id="applyButton" disable="true" focusTraversable="false" layoutX="150.0" layoutY="366.0" mnemonicParsing="false" onAction="#applyButtonOnAction" text="Применить" />
+            <Spinner fx:id="powerInput" disable="true" focusTraversable="false" layoutX="132.0" layoutY="261.0" prefHeight="25.0" prefWidth="75.0" />
+            <Separator layoutX="17.0" layoutY="185.0" prefHeight="3.0" prefWidth="342.0" />
+            <Label fx:id="freInputLabel" disable="true" layoutX="65.0" layoutY="235.0" prefHeight="20.0" prefWidth="60.0" text="Частота:" textAlignment="CENTER">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label fx:id="powInputLabel" disable="true" layoutX="50.0" layoutY="263.0" prefHeight="20.0" prefWidth="75.0" text="Мощность:" textAlignment="CENTER">
+            <Label fx:id="powInputLabel" disable="true" layoutX="47.0" layoutY="263.0" prefHeight="20.0" prefWidth="75.0" text="Мощность:" textAlignment="CENTER">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label fx:id="freqLabel" disable="true" layoutX="68.0" layoutY="113.0" prefHeight="20.0" prefWidth="60.0" text="Частота:">
+            <Label fx:id="freqLabel" disable="true" layoutX="103.0" layoutY="113.0" prefHeight="20.0" prefWidth="60.0" text="Частота:">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label fx:id="powLabel" disable="true" layoutX="50.0" layoutY="133.0" prefHeight="20.0" prefWidth="82.0" text="Мощность:">
+            <Label fx:id="powLabel" disable="true" layoutX="85.0" layoutY="133.0" prefHeight="20.0" prefWidth="82.0" text="Мощность:">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label fx:id="freqStatus" disable="true" layoutX="132.0" layoutY="113.0" prefHeight="20.0" prefWidth="134.0" text="n/a">
+            <Label fx:id="freqStatus" disable="true" layoutX="167.0" layoutY="113.0" prefHeight="20.0" prefWidth="134.0" text="n/a">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label fx:id="powStatus" disable="true" layoutX="132.0" layoutY="133.0" prefHeight="20.0" prefWidth="134.0" text="n/a">
+            <Label fx:id="powStatus" disable="true" layoutX="167.0" layoutY="133.0" prefHeight="20.0" prefWidth="134.0" text="n/a">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Separator layoutX="17.0" layoutY="338.0" prefHeight="3.0" prefWidth="268.0" />
-            <Button fx:id="startAndStopButton" disable="true" focusTraversable="false" layoutX="103.0" layoutY="433.0" mnemonicParsing="false" onAction="#startAndStopOnAction" prefHeight="25.0" prefWidth="97.0" text="Запуск" textAlignment="CENTER" />
-            <Button fx:id="connectButton" disable="true" focusTraversable="false" layoutX="152.0" layoutY="39.0" mnemonicParsing="false" onAction="#connectButtonOnAction" text="Подключиться" />
-            <Separator layoutX="15.0" layoutY="74.0" prefHeight="3.0" prefWidth="268.0" />
-            <Label fx:id="connectLabelText" disable="true" layoutX="43.0" layoutY="4.0" prefHeight="21.0" prefWidth="235.0" text="Выбор последовательного порта">
+            <Button fx:id="startAndStopButton" disable="true" focusTraversable="false" layoutX="141.0" layoutY="516.0" mnemonicParsing="false" onAction="#startAndStopOnAction" prefHeight="25.0" prefWidth="97.0" text="Запуск" textAlignment="CENTER" />
+            <Button fx:id="connectButton" disable="true" focusTraversable="false" layoutX="237.0" layoutY="39.0" mnemonicParsing="false" onAction="#connectButtonOnAction" text="Подключиться" />
+            <Separator layoutX="21.0" layoutY="76.0" prefHeight="3.0" prefWidth="342.0" />
+            <Label fx:id="connectLabelText" disable="true" layoutX="75.0" layoutY="4.0" prefHeight="21.0" prefWidth="235.0" text="Выбор последовательного порта">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <ComboBox fx:id="comPortsList" disable="true" focusTraversable="false" layoutX="60.0" layoutY="39.0" prefHeight="25.0" prefWidth="82.0" />
-            <Label fx:id="frqParInput" disable="true" layoutX="191.0" layoutY="234.0" prefHeight="20.0" prefWidth="44.0" text="МГц">
+            <ComboBox fx:id="comPortsList" disable="true" focusTraversable="false" layoutX="98.0" layoutY="39.0" prefHeight="25.0" prefWidth="126.0" />
+            <Label fx:id="frqParInput" disable="true" layoutX="221.0" layoutY="236.0" prefHeight="20.0" prefWidth="38.0" text="МГц">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label fx:id="powParInput" disable="true" layoutX="196.0" layoutY="263.0" prefHeight="20.0" prefWidth="38.0" text="dBm">
+            <Label fx:id="powParInput" disable="true" layoutX="280.0" layoutY="264.0" prefHeight="20.0" prefWidth="38.0" text="dBm">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <TextField fx:id="freqInput" disable="true" layoutX="123.0" layoutY="231.0" prefHeight="25.0" prefWidth="60.0" />
-            <Label fx:id="powInputDbmToWats" disable="true" layoutX="225.0" layoutY="263.0" prefHeight="20.0" prefWidth="75.0" text="(n/a мВт)">
+            <TextField fx:id="freqInput" disable="true" layoutX="131.0" layoutY="233.0" prefHeight="25.0" prefWidth="75.0" />
+            <Label fx:id="powInputDbmToWats" disable="true" layoutX="217.0" layoutY="263.0" prefHeight="20.0" prefWidth="82.0" text="(n/a мВт)">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Separator layoutX="17.0" layoutY="413.0" prefHeight="3.0" prefWidth="268.0" />
-            <Label fx:id="rssiLabel" disable="true" layoutX="94.0" layoutY="153.0" prefHeight="20.0" prefWidth="32.0" text="Rssi:">
+            <Separator layoutX="20.0" layoutY="497.0" prefHeight="3.0" prefWidth="330.0" />
+            <Label fx:id="rssiLabel" disable="true" layoutX="129.0" layoutY="153.0" prefHeight="20.0" prefWidth="32.0" text="Rssi:">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label fx:id="modeLabel" disable="true" layoutX="98.0" layoutY="349.0" prefHeight="20.0" prefWidth="107.0" text="Режим работы">
+            <Label fx:id="modeLabel" disable="true" layoutX="144.0" layoutY="422.0" prefHeight="27.0" prefWidth="97.0" text="Режим работы">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <RadioButton fx:id="genRadioButton" disable="true" layoutX="37.0" layoutY="376.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="107.0" selected="true" text="Генератор">
+            <RadioButton fx:id="genRadioButton" disable="true" layoutX="43.0" layoutY="461.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="97.0" selected="true" text="Генератор">
                <toggleGroup>
                   <ToggleGroup fx:id="modeGroup" />
                </toggleGroup></RadioButton>
-            <RadioButton fx:id="rssiRadioButton" disable="true" layoutX="160.0" layoutY="376.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="116.0" text="Измерение Rssi" toggleGroup="$modeGroup" />
-            <Label fx:id="rssiStatus" disable="true" layoutX="132.0" layoutY="153.0" prefHeight="20.0" prefWidth="134.0" text="n/a">
+            <RadioButton fx:id="rssiRadioButton" disable="true" layoutX="222.0" layoutY="461.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="126.0" text="Измерение Rssi" toggleGroup="$modeGroup" />
+            <Label fx:id="rssiStatus" disable="true" layoutX="167.0" layoutY="153.0" prefHeight="20.0" prefWidth="134.0" text="n/a">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label fx:id="statusLabel" disable="true" layoutX="70.0" layoutY="77.0" prefHeight="27.0" prefWidth="180.0" text="Текущие характеристики">
+            <Label fx:id="statusLabel" disable="true" layoutX="116.0" layoutY="76.0" prefHeight="27.0" prefWidth="180.0" text="Текущие характеристики">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label fx:id="conLabel" disable="true" layoutX="66.0" layoutY="196.0" prefHeight="20.0" prefWidth="172.0" text="Настройка характеристик">
+            <Label fx:id="conLabel" disable="true" layoutX="104.0" layoutY="197.0" prefHeight="20.0" prefWidth="172.0" text="Настройка характеристик">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
+            <Button fx:id="set830FreqButton" disable="true" focusTraversable="false" layoutX="12.0" layoutY="304.0" mnemonicParsing="false" onAction="#set830FreqButtonOnAction" text="830 МГц" />
+            <Button fx:id="set880FreqButton" disable="true" focusTraversable="false" layoutX="157.0" layoutY="304.0" mnemonicParsing="false" onAction="#set880FreqButtonOnAction" prefHeight="25.0" prefWidth="75.0" text="880 МГц" />
+            <Button fx:id="set930FreqButton" disable="true" focusTraversable="false" layoutX="312.0" layoutY="304.0" mnemonicParsing="false" onAction="#set930FreqButtonOnAction" text="930 МГц" />
+            <Separator layoutX="22.0" layoutY="411.0" prefHeight="3.0" prefWidth="330.0" />
+            <Button fx:id="set830FreqButton1" disable="true" focusTraversable="false" layoutX="85.0" layoutY="304.0" mnemonicParsing="false" onAction="#set855FreqButtonOnAction" text="855 МГц" />
+            <Button fx:id="set880FreqButton1" disable="true" focusTraversable="false" layoutX="241.0" layoutY="304.0" mnemonicParsing="false" onAction="#set905FreqButtonOnAction" text="905 МГц" />
       </children>
     </AnchorPane>
   </children>

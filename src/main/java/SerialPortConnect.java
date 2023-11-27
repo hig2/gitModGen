@@ -2,6 +2,8 @@ import com.fazecast.jSerialComm.SerialPort;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class SerialPortConnect {
@@ -129,7 +131,11 @@ public class SerialPortConnect {
 
     private static void writeTask(long delay) throws IOException, InterruptedException {
         AtomicLong t = new AtomicLong(0);
+        AtomicLong t2 = new AtomicLong(0);
+        AtomicInteger step = new AtomicInteger();
         boolean generatorFlag = false;
+        AtomicBoolean firstStepAutoGenFlag = new AtomicBoolean(false);
+        AtomicBoolean lastStepAutoGenFlag = new AtomicBoolean(false);;
 
         Thread thread = new Thread(() -> {
             setDefaultTask(defaultMessageList);

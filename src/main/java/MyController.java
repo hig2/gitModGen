@@ -61,6 +61,22 @@ public class MyController implements Initializable{
     @FXML
     private Button startAndStopButton;
 
+    @FXML
+    private Button set830FreqButton;
+
+    @FXML
+    private Button set880FreqButton;
+
+    @FXML
+    private Button set930FreqButton;
+
+    @FXML
+    private Button set855FreqButton;
+
+    @FXML
+    private Button set905FreqButton;
+
+
 
 
     @FXML
@@ -86,9 +102,6 @@ public class MyController implements Initializable{
     private Label freqStatus;
 
     @FXML
-    private Label frqPar;
-
-    @FXML
     private Label powLabel;
 
     @FXML
@@ -102,12 +115,6 @@ public class MyController implements Initializable{
 
     @FXML
     private Spinner<Integer> powerInput;
-
-    @FXML
-    private Label powPar;
-
-    @FXML
-    private Label powToWatsPar;
 
     @FXML
     private Label frqParInput;
@@ -135,11 +142,18 @@ public class MyController implements Initializable{
 
 
 
+
+
+
+
     @FXML
     private RadioButton genRadioButton;
 
     @FXML
     private RadioButton rssiRadioButton;
+
+    @FXML
+    private RadioButton autoFreqGenRadioButton;
 
     @FXML
     private ToggleGroup modeGroup;
@@ -192,6 +206,34 @@ public class MyController implements Initializable{
         SerialPortConnect.setQueueMessage(ModemPostman.createMessageSetPower(powerInput.getValue()));
     }
 
+
+    public void set830FreqButtonOnAction(ActionEvent actionEvent){
+        freqInput.setText("830");
+        SerialPortConnect.setQueueMessage(ModemPostman.createMessageSetFrequency(Integer.parseInt(freqInput.getText())));
+
+    }
+    public void set880FreqButtonOnAction(ActionEvent actionEvent){
+        freqInput.setText("880");
+        SerialPortConnect.setQueueMessage(ModemPostman.createMessageSetFrequency(Integer.parseInt(freqInput.getText())));
+    }
+    public void set930FreqButtonOnAction(ActionEvent actionEvent){
+        freqInput.setText("930");
+        SerialPortConnect.setQueueMessage(ModemPostman.createMessageSetFrequency(Integer.parseInt(freqInput.getText())));
+    }
+
+    public void set905FreqButtonOnAction(ActionEvent actionEvent){
+        freqInput.setText("905");
+        SerialPortConnect.setQueueMessage(ModemPostman.createMessageSetFrequency(Integer.parseInt(freqInput.getText())));
+    }
+
+    public void set855FreqButtonOnAction(ActionEvent actionEvent){
+        freqInput.setText("855");
+        SerialPortConnect.setQueueMessage(ModemPostman.createMessageSetFrequency(Integer.parseInt(freqInput.getText())));
+    }
+
+
+
+
     private void showStatusConnectButton(){
         if(SerialPortConnect.isConnected()){
             connectButton.setText("Отключиться");
@@ -210,7 +252,7 @@ public class MyController implements Initializable{
     }
 
     private void showGeneralWindow(){
-        boolean flagDisableGeneralWindow = !SerialPortConnect.isConnected();
+        boolean flagDisableGeneralWindow = !(SerialPortConnect.isConnected() && SerialPortConnect.isExchangeFlag() && ModemPostman.getStatusModem() == 0); //!SerialPortConnect.isConnected();
 
 
         freqLabel.setDisable(flagDisableGeneralWindow);
@@ -221,7 +263,7 @@ public class MyController implements Initializable{
         freqInput.setDisable(flagDisableGeneralWindow);
         powInputLabel.setDisable(flagDisableGeneralWindow);
         powerInput.setDisable(flagDisableGeneralWindow);
-        startAndStopButton.setDisable(flagDisableGeneralWindow);
+        startAndStopButton.setDisable(false);
         powParInput.setDisable(flagDisableGeneralWindow);
         frqParInput.setDisable(flagDisableGeneralWindow);
         powInputDbmToWats.setDisable(flagDisableGeneralWindow);
@@ -229,6 +271,9 @@ public class MyController implements Initializable{
         rssiStatus.setDisable(flagDisableGeneralWindow);
         statusLabel.setDisable(flagDisableGeneralWindow);
         conLabel.setDisable(flagDisableGeneralWindow);
+        set830FreqButton.setDisable(flagDisableGeneralWindow);
+        set880FreqButton.setDisable(flagDisableGeneralWindow);
+        set930FreqButton.setDisable(flagDisableGeneralWindow);
 
 
         showPar();
@@ -264,6 +309,7 @@ public class MyController implements Initializable{
 
 
 
+
         freqStatus.setText(freq);
         powStatus.setText(pow);
         rssiStatus.setText(rssi);
@@ -293,6 +339,7 @@ public class MyController implements Initializable{
             applyButton.setDisable(true);
         }
     }
+
 
     private void showStatusStartAndStopButton(){
         if(ModemPostman.getStatusModem() == 0){
@@ -333,5 +380,7 @@ public class MyController implements Initializable{
                 break;
         }
     }
+
+
 }
 
